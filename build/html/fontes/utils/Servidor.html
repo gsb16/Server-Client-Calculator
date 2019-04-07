@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Servidor.py &#8212; Documentação Trabalho de Redes 2 0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../../search.html" />
+    <link rel="next" title="__init__.py" href="__init__.html" />
+    <link rel="prev" title="Clone.py" href="Clone.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="servidor-py">
+<span id="utilsservidor"></span><h1>Servidor.py<a class="headerlink" href="#servidor-py" title="Link permanente para este título">¶</a></h1>
+<p><a class="reference download internal" href="../../_downloads/Servidor.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">clique</span> <span class="pre">aqui</span> <span class="pre">para</span> <span class="pre">baixar</span> <span class="pre">o</span> <span class="pre">arquivo</span> <span class="pre">utils/Servidor.py</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="c1"># autores: Gabriel de Souza Barreto, Guilherme Bastos de Oliveira</span>
+<span class="c1"># objetivo: implementar singleton para realizar tarefas do servidor</span>
+<span class="c1"># última modificação: 04/06/2018</span>
+
+<span class="kn">from</span> <span class="nn">utils</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">struct</span><span class="o">,</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">Servidor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">end_ip</span><span class="p">,</span> <span class="n">porta</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_ip</span> <span class="o">=</span> <span class="n">end_ip</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">porta</span> <span class="o">=</span> <span class="n">porta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clones</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_escuta</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">criaListaServidores</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configuraSocket</span><span class="p">()</span>
+
+    <span class="c1"># configuração do socket para escutar multicast e do socket para enviar mensagem</span>
+    <span class="k">def</span> <span class="nf">configuraSocket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_escuta</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_escuta</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">porta</span><span class="p">))</span>
+        <span class="n">mreq</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;4sl&#39;</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">inet_aton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_ip</span><span class="p">),</span> <span class="n">socket</span><span class="o">.</span><span class="n">INADDR_ANY</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_escuta</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_IP</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">IP_ADD_MEMBERSHIP</span><span class="p">,</span> <span class="n">mreq</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_envia</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
+
+    <span class="c1"># função alvo da thread de verificação</span>
+    <span class="k">def</span> <span class="nf">statusContinuo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">paraThread</span><span class="p">):</span>
+        <span class="n">segundos_passados</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enviaInicial</span><span class="p">()</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">paraThread</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">serv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clones</span><span class="p">:</span>
+                <span class="n">serv</span><span class="o">.</span><span class="n">checa</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">segundos_passados</span> <span class="o">+</span> <span class="n">T_HEARTBEAT</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enviaStatus</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">)</span>
+                <span class="n">segundos_passados</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># cria lista (tabela) de clones</span>
+    <span class="k">def</span> <span class="nf">criaListaServidores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">clones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Clone</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+    <span class="c1"># define se é líder</span>
+    <span class="k">def</span> <span class="nf">lider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">servidor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clones</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">servidor</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;O&#39;</span><span class="p">:</span>
+                <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[R] - não sou o líder&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[R] - sou o líder&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># métodos de processamento de mensagens</span>
+    <span class="k">def</span> <span class="nf">processaStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dados</span><span class="p">):</span>
+        <span class="n">tipo</span><span class="p">,</span> <span class="n">origem</span><span class="p">,</span> <span class="n">valor</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;cic&#39;</span><span class="p">,</span> <span class="n">dados</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">origem</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[S] - recebi status &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">valor</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; de &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">origem</span><span class="p">))</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">origem</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clones</span><span class="p">[</span><span class="n">origem</span><span class="o">-</span><span class="n">offset</span><span class="p">]</span><span class="o">.</span><span class="n">atualizaStatus</span><span class="p">(</span><span class="n">valor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">processaInicial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dados</span><span class="p">):</span>
+        <span class="n">tipo</span><span class="p">,</span> <span class="n">origem</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;ci&#39;</span><span class="p">,</span> <span class="n">dados</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">origem</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[I] - recebi I de &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">origem</span><span class="p">))</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">origem</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="k">else</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clones</span><span class="p">[</span><span class="n">origem</span><span class="o">-</span><span class="n">offset</span><span class="p">]</span><span class="o">.</span><span class="n">atualizaStatus</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enviaStatus</span><span class="p">(</span><span class="s1">&#39;O&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">processaRequisicao</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_cliente</span><span class="p">,</span> <span class="n">dados</span><span class="p">):</span>
+        <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[R] - recebi requisição de &quot;</span> <span class="o">+</span> <span class="n">end_cliente</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lider</span><span class="p">():</span>
+            <span class="n">tipo</span><span class="p">,</span> <span class="n">tam</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;ci&#39;</span><span class="p">,</span> <span class="n">dados</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+            <span class="n">expressao</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tam</span><span class="p">),</span> <span class="n">dados</span><span class="p">[</span><span class="mi">8</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># evita processamento de expressões com letras</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">expressao</span><span class="p">):</span> 
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">enviaResposta</span><span class="p">(</span><span class="n">end_cliente</span><span class="p">,</span> <span class="nb">eval</span><span class="p">(</span><span class="n">expressao</span><span class="p">))</span>
+                <span class="c1"># tratamento dos erros</span>
+                <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">enviaRespostaErro</span><span class="p">(</span><span class="n">end_cliente</span><span class="p">,</span> <span class="n">ERRO_DIVZERO</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">SyntaxError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">enviaRespostaErro</span><span class="p">(</span><span class="n">end_cliente</span><span class="p">,</span> <span class="n">ERRO_SINTAXE</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">enviaRespostaErro</span><span class="p">(</span><span class="n">end_cliente</span><span class="p">,</span> <span class="n">ERRO_DESCONHECIDO</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">enviaRespostaErro</span><span class="p">(</span><span class="n">end_cliente</span><span class="p">,</span> <span class="n">ERRO_LETRA</span><span class="p">)</span>
+
+    <span class="c1"># métodos para o envio de mensagens</span>
+    <span class="k">def</span> <span class="nf">enviaInicial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[I] - enviando I&quot;</span><span class="p">)</span>
+        <span class="n">dados</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;ci&#39;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_envia</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">dados</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">porta</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">enviaStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[S] - enviando status &quot;</span> <span class="o">+</span> <span class="n">status</span><span class="p">)</span>
+        <span class="n">dados</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;cic&#39;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_envia</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">dados</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_ip</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">porta</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">enviaResposta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_cliente</span><span class="p">,</span> <span class="n">resposta</span><span class="p">):</span>
+        <span class="n">dados</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;ccf&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">SUCESSO</span><span class="p">,</span> <span class="n">resposta</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_envia</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">dados</span><span class="p">,</span> <span class="n">end_cliente</span><span class="p">)</span>
+        <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[A] - respondendo requisição de &quot;</span> <span class="o">+</span> <span class="n">end_cliente</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">enviaRespostaErro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">end_cliente</span><span class="p">,</span> <span class="n">erro</span><span class="p">):</span>
+        <span class="n">safePrint</span><span class="p">(</span><span class="s2">&quot;[A] - respondendo requisição de &quot;</span> <span class="o">+</span> <span class="n">end_cliente</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">dados</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;ccf&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">erro</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_envia</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">dados</span><span class="p">,</span> <span class="n">end_cliente</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+<h3><a href="../../index.html">Início</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../relatorio.html">Relatório Técnico</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatorio.html#execucao">Execução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatorio.html#decisoes-de-projeto">Decisões de projeto</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../fontes.html">Estrutura do projeto</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../fontes.html#id1">Fontes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cliente.html">cliente.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../servidor.html">servidor.py</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../fontes.html#utils">Utils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Clone.html">Clone.py</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Servidor.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="__init__.html">__init__.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="safePrint.html">safePrint.py</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logs.html">Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Gabriel de Souza Barreto, Guilherme Bastos de Oliveira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/fontes/utils/Servidor.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,229 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Relatório Técnico &#8212; Documentação Trabalho de Redes 2 0</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Pesquisar" href="search.html" />
+    <link rel="next" title="Estrutura do projeto" href="fontes.html" />
+    <link rel="prev" title="Trabalho Prático Redes de Computadores II" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="relatorio-tecnico">
+<h1>Relatório Técnico<a class="headerlink" href="#relatorio-tecnico" title="Link permanente para este título">¶</a></h1>
+<div class="section" id="o-objetivo-do-trabalho">
+<h2>O Objetivo do trabalho<a class="headerlink" href="#o-objetivo-do-trabalho" title="Link permanente para este título">¶</a></h2>
+<p>O objetivo deste trabalho é implementar através de replicação de servidores um serviço de calculadora de alta disponibilidade.</p>
+<p>A linguagem para desenvolvimento escolhida foi Python devido a indicação do professor e a familiaridade com a linguagem por parte dos integrantes do grupo.</p>
+<p>O funcionamento do sistema é baseado em vários servidores que, executando o mesmo processo, escutam em um grupo multicast. Ao receberem uma requisição é decidido (por método que será explicado posteriormente) qual servidor deverá responder a requisição, e então este e apenas este servidor irá responder ao cliente.</p>
+</div>
+<div class="section" id="o-grupo-de-servidores">
+<h2>O grupo de servidores<a class="headerlink" href="#o-grupo-de-servidores" title="Link permanente para este título">¶</a></h2>
+<p>Cada clone possui um identificador, que é informado no ínicio de sua execução.
+Um processo servidor possui três funções básicas:</p>
+<ul class="simple">
+<li>avisar periodicamente ao grupo que está ativo (heartbeat)</li>
+<li>determinar situação (ativo/inativo) dos outros servidores</li>
+<li>quando for o servidor líder responder requisições do cliente</li>
+</ul>
+<p>As funções de avisar ao grupo seu status e determinar a situação dos clones é realizada por uma thread filha do processo principal, que por sua vez apenas recebe mensagens e as processa de acordo.</p>
+</div>
+<div class="section" id="o-cliente">
+<h2>O cliente<a class="headerlink" href="#o-cliente" title="Link permanente para este título">¶</a></h2>
+<p>O programa cliente possui um funcionamento bem simples:</p>
+<ol class="arabic simple">
+<li>recebe expressão do usuário</li>
+<li>faz requisição</li>
+<li><dl class="first docutils">
+<dt>espera receber resposta por por um tempo T_TIMEOUT</dt>
+<dd><ul class="first last">
+<li>recebeu: mostra o resultado recebido</li>
+<li>não recebeu (timeout): volta ao passo 2</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>volta ao passo 1 até ser encerrado (<kbd class="kbd docutils literal notranslate">Ctrl-C</kbd>)</li>
+</ol>
+</div>
+</div>
+<div class="section" id="execucao">
+<h1>Execução<a class="headerlink" href="#execucao" title="Link permanente para este título">¶</a></h1>
+<p>Para executar o programa cliente:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">cliente</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">endereço</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">porta</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Para executar o programa servidor:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">servidor</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="nb">id</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">endereço</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">porta</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Cuidado</p>
+<p>Como o projeto ocorre sobre comunicação multicast, é necessário utilizar endereços IP reservados para este uso</p>
+<p class="last">Recomenda-se o endereço IPv4 230.0.0.1</p>
+</div>
+</div>
+<div class="section" id="decisoes-de-projeto">
+<h1>Decisões de projeto<a class="headerlink" href="#decisoes-de-projeto" title="Link permanente para este título">¶</a></h1>
+<div class="section" id="organizacao-do-codigo">
+<h2>Organização do Código<a class="headerlink" href="#organizacao-do-codigo" title="Link permanente para este título">¶</a></h2>
+<p>A organização do código é relativamente simples (veja a <a class="reference internal" href="fontes.html#fontes"><span class="std std-ref">Estrutura do projeto</span></a>):</p>
+<ul class="simple">
+<li>arquivo <a class="reference internal" href="fontes/cliente.html#cliente"><span class="std std-ref">cliente.py</span></a> contém o código referente a leitura de expressão do usuário, envio de requisição para os servidores, recebimento do resultado e exibição do valor recebido</li>
+<li>arquivo <a class="reference internal" href="fontes/servidor.html#servidor"><span class="std std-ref">servidor.py</span></a> contém o código referente a criação da thread responsável por envio de heartbeat e monitoramento do status dos outros servidores. O processo principal recebe, processa e envia mensagens</li>
+<li><dl class="first docutils">
+<dt>arquivos do diretório <a class="reference internal" href="fontes.html#dirutils"><span class="std std-ref">Utils</span></a>:</dt>
+<dd><ul class="first last">
+<li>o arquivo <a class="reference internal" href="fontes/utils/__init__.html#init"><span class="std std-ref">__init__.py</span></a> contém um conjunto de constantes e importa os arquivos adicionais encontrados no diretório <code class="file docutils literal notranslate"><span class="pre">utils</span></code></li>
+<li>o arquivo <a class="reference internal" href="fontes/utils/Servidor.html#utilsservidor"><span class="std std-ref">Servidor.py</span></a> definição da classe Servidor que contém todos os métodos usados em uma instância servidor</li>
+<li>o arquivo <a class="reference internal" href="fontes/utils/Clone.html#clone"><span class="std std-ref">Clone.py</span></a> definição da classe Clone para monitoramento dos outros servidores</li>
+<li>o arquivo <a class="reference internal" href="fontes/utils/safePrint.html#safeprint"><span class="std std-ref">safePrint.py</span></a> fornece uma função para permitir impressão de log sem interferência entre as threads</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="funcionamento-da-calculadora">
+<h2>Funcionamento da calculadora<a class="headerlink" href="#funcionamento-da-calculadora" title="Link permanente para este título">¶</a></h2>
+<p>O programa cliente recebe do usuário uma expressão em formato de string. Essa string é enviada ao serviço de calculadora.
+O servidor passa a expressão como parâmetro para a função <a class="reference external" href="https://docs.python.org/2/library/functions.html#eval">eval()</a>, que retorna o valor caso obtenha sucesso, ou levanta uma exceção em casos de erros.
+Quando ocorre erro, o servidor envia uma mensagem informando ao cliente.</p>
+<div class="admonition note">
+<p class="first admonition-title">Nota</p>
+<p>São executadas apenas expressões matemáticas que não contenham letras para evitar o processamento de instruções maliciosas.</p>
+<p class="last">Se a expressão conter uma comparação, então o resultado será 1.0 caso verdadeira ou 0.0 caso contrário.</p>
+</div>
+</div>
+<div class="section" id="erros">
+<h2>Erros<a class="headerlink" href="#erros" title="Link permanente para este título">¶</a></h2>
+<p>O servidor responde a requisição, em casos de erro, com um dentre quatro tipos: ERRO_SINTAXE, ERRO_LETRA, ERRO_DIVZERO e ERRO_DESCONHECIDO</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Entre</span> <span class="n">uma</span> <span class="n">expressão</span><span class="p">:</span> <span class="mi">8</span><span class="o">/</span><span class="mi">0</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">08</span> <span class="n">Enviando</span> <span class="n">requisição</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">08</span> <span class="n">ERRO</span><span class="p">:</span> <span class="n">Não</span> <span class="n">é</span> <span class="n">possível</span> <span class="n">realizar</span> <span class="n">divisão</span> <span class="n">por</span> <span class="n">zero</span>
+<span class="n">Entre</span> <span class="n">uma</span> <span class="n">expressão</span><span class="p">:</span> <span class="n">ataque_hacker</span><span class="p">()</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">13</span> <span class="n">Enviando</span> <span class="n">requisição</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">14</span> <span class="n">ERRO</span><span class="p">:</span> <span class="n">Expressão</span> <span class="n">contém</span> <span class="n">símbolo</span> <span class="n">inválido</span> <span class="p">(</span><span class="n">letras</span><span class="p">)</span>
+<span class="n">Entre</span> <span class="n">uma</span> <span class="n">expressão</span><span class="p">:</span> <span class="mi">1</span><span class="o">++</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">17</span> <span class="n">Enviando</span> <span class="n">requisição</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">17</span> <span class="n">ERRO</span><span class="p">:</span> <span class="n">Expressão</span> <span class="n">possui</span> <span class="n">erro</span> <span class="n">de</span> <span class="n">sintaxe</span>
+<span class="n">Entre</span> <span class="n">uma</span> <span class="n">expressão</span><span class="p">:</span> <span class="mi">2</span><span class="o">**</span><span class="mi">1024</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">22</span> <span class="n">Enviando</span> <span class="n">requisição</span>
+<span class="mi">17</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">22</span> <span class="n">ERRO</span><span class="p">:</span> <span class="n">Ocorreu</span> <span class="n">algum</span> <span class="n">erro</span> <span class="n">ao</span> <span class="n">calcular</span> <span class="n">a</span> <span class="n">expressão</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="escolha-do-lider">
+<h2>Escolha do líder<a class="headerlink" href="#escolha-do-lider" title="Link permanente para este título">¶</a></h2>
+<p>O líder é o clone de menor identificador que está ativo.</p>
+</div>
+<div class="section" id="definindo-servidores-in-ativos">
+<h2>Definindo servidores (in)ativos<a class="headerlink" href="#definindo-servidores-in-ativos" title="Link permanente para este título">¶</a></h2>
+<p>Todo servidor, ao ser iniciado, envia um heartbeat inicial e recebe como resposta o heartbeat de todos os outros servidores em execução.
+Um servidor constantemente verifica se seus clones estão ativos, ou seja, se tempo transcorrido desde o último heartbeat recebido é menor que o tempo T_PADRAO. Caso contrário, este clone é considerado inativo até o recebimento do próximo heartbeat. Um servidor ao ser encerrado envia uma mensagem de encerramento e é considerado inativo por todos os outros.</p>
+</div>
+<div class="section" id="datagramas-criados">
+<h2>Datagramas criados<a class="headerlink" href="#datagramas-criados" title="Link permanente para este título">¶</a></h2>
+<p>Todos os datagramas são iniciados por um byte que armazena um “char” e informa qual o tipo do datagrama. Foram criados quatro tipos diferentes para o trabalho:</p>
+<ul>
+<li><p class="first">Tipo “I”: mensagem enviada quando o servidor é iniciado (heartbeat inicial) avisando que está online e pedindo o status dos clones</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tipo</span> <span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">|</span> <span class="n">origem</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Tipo “S”: mensagem enviada para informar o status, que é um heartbeat periódico, uma mensagem de encerramento ou uma resposta a um heartbeat inicial</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tipo</span> <span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">|</span> <span class="n">origem</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">|</span> <span class="n">valor</span> <span class="p">(</span><span class="n">char</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Tipo “R”: mensagem enviada pelo cliente ao grupo de servidores que contém uma expressão a ser calculada (requisição)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tipo</span> <span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">|</span> <span class="n">tam</span> <span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">|</span> <span class="n">expressao</span> <span class="p">(</span><span class="n">string</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Tipo “A”: mensagem de resposta enviada pelo líder ao cliente contendo o valor da expressão ou o tipo do erro</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tipo</span> <span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">|</span> <span class="n">sucesso</span> <span class="p">(</span><span class="n">char</span><span class="p">)</span> <span class="o">|</span> <span class="n">valor</span> <span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+<h3><a href="index.html">Início</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Relatório Técnico</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#o-objetivo-do-trabalho">O Objetivo do trabalho</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#o-grupo-de-servidores">O grupo de servidores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#o-cliente">O cliente</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#execucao">Execução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#decisoes-de-projeto">Decisões de projeto</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#organizacao-do-codigo">Organização do Código</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#funcionamento-da-calculadora">Funcionamento da calculadora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#erros">Erros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#escolha-do-lider">Escolha do líder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#definindo-servidores-in-ativos">Definindo servidores (in)ativos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#datagramas-criados">Datagramas criados</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fontes.html">Estrutura do projeto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fontes.html#id1">Fontes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Gabriel de Souza Barreto, Guilherme Bastos de Oliveira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/relatorio.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

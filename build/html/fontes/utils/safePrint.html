@@ -1,0 +1,113 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>safePrint.py &#8212; Documentação Trabalho de Redes 2 0</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../../search.html" />
+    <link rel="next" title="Logs" href="../../logs.html" />
+    <link rel="prev" title="__init__.py" href="__init__.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="safeprint-py">
+<span id="safeprint"></span><h1>safePrint.py<a class="headerlink" href="#safeprint-py" title="Link permanente para este título">¶</a></h1>
+<p><a class="reference download internal" href="../../_downloads/safePrint.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">clique</span> <span class="pre">aqui</span> <span class="pre">para</span> <span class="pre">baixar</span> <span class="pre">o</span> <span class="pre">arquivo</span> <span class="pre">utils/safePrint.py</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="c1"># autores: Gabriel de Souza Barreto, Guilherme Bastos de Oliveira</span>
+<span class="c1"># objetivo: imprimir log sem interferência entre threads</span>
+<span class="c1"># última modificação: 04/06/2018</span>
+
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Lock</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">datetime</span>
+
+<span class="c1"># variável global</span>
+<span class="n">print_lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">safePrint</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="c1"># adquire trava, imprime com timestamp e libera trava</span>
+    <span class="k">global</span> <span class="n">print_lock</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+    <span class="n">print_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">date</span><span class="p">,</span> <span class="nb">str</span>
+    <span class="n">print_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+<h3><a href="../../index.html">Início</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../relatorio.html">Relatório Técnico</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatorio.html#execucao">Execução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../relatorio.html#decisoes-de-projeto">Decisões de projeto</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../fontes.html">Estrutura do projeto</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../fontes.html#id1">Fontes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../cliente.html">cliente.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../servidor.html">servidor.py</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../fontes.html#utils">Utils</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Clone.html">Clone.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Servidor.html">Servidor.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="__init__.html">__init__.py</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">safePrint.py</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../logs.html">Logs</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Gabriel de Souza Barreto, Guilherme Bastos de Oliveira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/fontes/utils/safePrint.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

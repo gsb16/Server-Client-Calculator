@@ -1,0 +1,64 @@
+$ python servidor.py 2 230.0.0.1 22000
+Servidor #2 escutando no endereço 230.0.0.1:22000
+17:47:41 [I] - enviando I
+17:47:47 [R] - recebi requisição de 10.254.221.38
+17:47:47 [R] - sou o líder
+17:47:47 [A] - respondendo requisição de 10.254.221.38
+17:47:49 [S] - enviando status O
+17:47:50 [R] - recebi requisição de 10.254.221.38
+17:47:50 [R] - sou o líder
+17:47:50 [A] - respondendo requisição de 10.254.221.38
+17:47:52 [I] - recebi I de 1
+17:47:52 [M] - status de 1 atualizado para O
+17:47:52 [S] - enviando status O
+17:47:56 [R] - recebi requisição de 10.254.221.38
+17:47:56 [R] - não sou o líder
+17:47:57 [S] - enviando status O
+17:47:59 [I] - recebi I de 0
+17:47:59 [M] - status de 0 atualizado para O
+17:47:59 [S] - enviando status O
+17:47:59 [S] - recebi status O de 1
+17:48:00 [S] - recebi status O de 1
+17:48:02 [R] - recebi requisição de 10.254.221.38
+17:48:02 [R] - não sou o líder
+17:48:05 [S] - enviando status O
+17:48:07 [S] - recebi status O de 0
+17:48:08 [R] - recebi requisição de 10.254.221.38
+17:48:08 [R] - não sou o líder
+17:48:08 [S] - recebi status O de 1
+17:48:13 [S] - enviando status O
+17:48:13 [R] - recebi requisição de 10.254.221.38
+17:48:13 [R] - não sou o líder
+17:48:15 [S] - recebi status O de 0
+17:48:16 [S] - recebi status O de 1
+17:48:17 [R] - recebi requisição de 10.254.221.38
+17:48:17 [R] - não sou o líder
+17:48:21 [S] - enviando status O
+17:48:22 [R] - recebi requisição de 10.254.221.38
+17:48:22 [R] - não sou o líder
+17:48:23 [S] - recebi status O de 0
+17:48:24 [S] - recebi status O de 1
+17:48:27 [S] - recebi status F de 0
+17:48:27 [M] - status de 0 atualizado para F
+17:48:29 [S] - enviando status O
+17:48:32 [S] - recebi status O de 1
+17:48:36 [R] - recebi requisição de 10.254.221.38
+17:48:36 [R] - não sou o líder
+17:48:37 [S] - enviando status O
+17:48:42 [R] - recebi requisição de 10.254.221.38
+17:48:42 [R] - não sou o líder
+17:48:42 [M] - status de 1 atualizado para F
+17:48:44 [R] - recebi requisição de 10.254.221.38
+17:48:44 [R] - sou o líder
+17:48:44 [A] - respondendo requisição de 10.254.221.38
+17:48:45 [S] - enviando status O
+17:48:50 [I] - recebi I de 0
+17:48:50 [M] - status de 0 atualizado para O
+17:48:50 [S] - enviando status O
+17:48:53 [S] - enviando status O
+17:48:57 [R] - recebi requisição de 10.254.221.38
+17:48:57 [R] - não sou o líder
+17:48:58 [S] - recebi status O de 0
+^C
+17:49:00 Encerrado execução
+17:49:00 [S] - enviando status F

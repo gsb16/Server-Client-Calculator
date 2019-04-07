@@ -1,0 +1,50 @@
+$ python servidor.py 0 230.0.0.1 22000
+Servidor #0 escutando no endereço 230.0.0.1:22000
+17:47:59 [I] - enviando I
+17:47:59 [S] - recebi status O de 1
+17:47:59 [M] - status de 1 atualizado para O
+17:47:59 [S] - recebi status O de 2
+17:47:59 [M] - status de 2 atualizado para O
+17:48:00 [S] - recebi status O de 1
+17:48:02 [R] - recebi requisição de 10.254.221.38
+17:48:02 [R] - sou o líder
+17:48:02 [A] - respondendo requisição de 10.254.221.38
+17:48:05 [S] - recebi status O de 2
+17:48:07 [S] - enviando status O
+17:48:08 [R] - recebi requisição de 10.254.221.38
+17:48:08 [R] - sou o líder
+17:48:08 [A] - respondendo requisição de 10.254.221.38
+17:48:08 [S] - recebi status O de 1
+17:48:13 [S] - recebi status O de 2
+17:48:13 [R] - recebi requisição de 10.254.221.38
+17:48:13 [R] - sou o líder
+17:48:13 [A] - respondendo requisição de 10.254.221.38
+17:48:15 [S] - enviando status O
+17:48:16 [S] - recebi status O de 1
+17:48:17 [R] - recebi requisição de 10.254.221.38
+17:48:17 [R] - sou o líder
+17:48:17 [A] - respondendo requisição de 10.254.221.38
+17:48:21 [S] - recebi status O de 2
+17:48:22 [R] - recebi requisição de 10.254.221.38
+17:48:22 [R] - sou o líder
+17:48:22 [A] - respondendo requisição de 10.254.221.38
+17:48:23 [S] - enviando status O
+17:48:24 [S] - recebi status O de 1
+^C
+17:48:27 Encerrado execução
+17:48:27 [S] - enviando status F
+$ python servidor.py 0 230.0.0.1 22000
+Servidor #0 escutando no endereço 230.0.0.1:22000
+17:48:50 [I] - enviando I
+17:48:50 [S] - recebi status O de 2
+17:48:50 [M] - status de 2 atualizado para O
+17:48:53 [S] - recebi status O de 2
+17:48:57 [R] - recebi requisição de 10.254.221.38
+17:48:57 [R] - sou o líder
+17:48:57 [A] - respondendo requisição de 10.254.221.38
+17:48:58 [S] - enviando status O
+17:49:00 [S] - recebi status F de 2
+17:49:00 [M] - status de 2 atualizado para F
+^C
+17:49:00 Encerrado execução
+17:49:00 [S] - enviando status F

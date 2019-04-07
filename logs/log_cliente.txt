@@ -1,0 +1,38 @@
+$ python cliente.py 230.0.0.1 22000
+Entre uma expressão: 4+2
+17:47:47 Enviando requisição
+17:47:47 Resposta recebida: 6.0
+Entre uma expressão: 5*7
+17:47:50 Enviando requisição
+17:47:50 Resposta recebida: 35.0
+Entre uma expressão: 2**3
+17:47:56 Enviando requisição
+17:47:56 Resposta recebida: 8.0
+Entre uma expressão: 18/3
+17:48:02 Enviando requisição
+17:48:02 Resposta recebida: 6.0
+Entre uma expressão: 8/0
+17:48:08 Enviando requisição
+17:48:08 ERRO: Não é possível realizar divisão por zero
+Entre uma expressão: ataque_hacker()
+17:48:13 Enviando requisição
+17:48:14 ERRO: Expressão contém símbolo inválido (letras)
+Entre uma expressão: 1++
+17:48:17 Enviando requisição
+17:48:17 ERRO: Expressão possui erro de sintaxe
+Entre uma expressão: 2**1024
+17:48:22 Enviando requisição
+17:48:22 ERRO: Ocorreu algum erro ao calcular a expressão
+Entre uma expressão: (2+3)*4
+17:48:36 Enviando requisição
+17:48:36 Resposta recebida: 20.0
+Entre uma expressão: 1+1
+17:48:42 Enviando requisição
+17:48:44 Timeout - não recebi resposta
+17:48:44 Enviando requisição
+17:48:44 Resposta recebida: 2.0
+Entre uma expressão: 21/3
+17:48:57 Enviando requisição
+17:48:57 Resposta recebida: 7.0
+Entre uma expressão: ^C
+Encerrando execução

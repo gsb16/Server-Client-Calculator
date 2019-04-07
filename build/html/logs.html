@@ -1,0 +1,298 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Logs &#8212; Documentação Trabalho de Redes 2 0</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Pesquisar" href="search.html" />
+    <link rel="prev" title="safePrint.py" href="fontes/utils/safePrint.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="logs">
+<h1>Logs<a class="headerlink" href="#logs" title="Link permanente para este título">¶</a></h1>
+<div class="section" id="servidor-0">
+<h2>Servidor 0<a class="headerlink" href="#servidor-0" title="Link permanente para este título">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python servidor.py 0 230.0.0.1 22000
+Servidor #0 escutando no endereço 230.0.0.1:22000
+17:47:59 [I] - enviando I
+17:47:59 [S] - recebi status O de 1
+17:47:59 [M] - status de 1 atualizado para O
+17:47:59 [S] - recebi status O de 2
+17:47:59 [M] - status de 2 atualizado para O
+17:48:00 [S] - recebi status O de 1
+17:48:02 [R] - recebi requisição de 10.254.221.38
+17:48:02 [R] - sou o líder
+17:48:02 [A] - respondendo requisição de 10.254.221.38
+17:48:05 [S] - recebi status O de 2
+17:48:07 [S] - enviando status O
+17:48:08 [R] - recebi requisição de 10.254.221.38
+17:48:08 [R] - sou o líder
+17:48:08 [A] - respondendo requisição de 10.254.221.38
+17:48:08 [S] - recebi status O de 1
+17:48:13 [S] - recebi status O de 2
+17:48:13 [R] - recebi requisição de 10.254.221.38
+17:48:13 [R] - sou o líder
+17:48:13 [A] - respondendo requisição de 10.254.221.38
+17:48:15 [S] - enviando status O
+17:48:16 [S] - recebi status O de 1
+17:48:17 [R] - recebi requisição de 10.254.221.38
+17:48:17 [R] - sou o líder
+17:48:17 [A] - respondendo requisição de 10.254.221.38
+17:48:21 [S] - recebi status O de 2
+17:48:22 [R] - recebi requisição de 10.254.221.38
+17:48:22 [R] - sou o líder
+17:48:22 [A] - respondendo requisição de 10.254.221.38
+17:48:23 [S] - enviando status O
+17:48:24 [S] - recebi status O de 1
+^C
+17:48:27 Encerrado execução
+17:48:27 [S] - enviando status F
+$ python servidor.py 0 230.0.0.1 22000
+Servidor #0 escutando no endereço 230.0.0.1:22000
+17:48:50 [I] - enviando I
+17:48:50 [S] - recebi status O de 2
+17:48:50 [M] - status de 2 atualizado para O
+17:48:53 [S] - recebi status O de 2
+17:48:57 [R] - recebi requisição de 10.254.221.38
+17:48:57 [R] - sou o líder
+17:48:57 [A] - respondendo requisição de 10.254.221.38
+17:48:58 [S] - enviando status O
+17:49:00 [S] - recebi status F de 2
+17:49:00 [M] - status de 2 atualizado para F
+^C
+17:49:00 Encerrado execução
+17:49:00 [S] - enviando status F
+</pre></div>
+</div>
+</div>
+<div class="section" id="servidor-1">
+<h2>Servidor 1<a class="headerlink" href="#servidor-1" title="Link permanente para este título">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python servidor.py 1 230.0.0.1 22000
+Servidor #1 escutando no endereço 230.0.0.1:22000
+17:47:52 [I] - enviando I
+17:47:52 [S] - recebi status O de 2
+17:47:52 [M] - status de 2 atualizado para O
+17:47:56 [R] - recebi requisição de 10.254.221.38
+17:47:56 [R] - sou o líder
+17:47:56 [A] - respondendo requisição de 10.254.221.38
+17:47:57 [S] - recebi status O de 2
+17:47:59 [I] - recebi I de 0
+17:47:59 [M] - status de 0 atualizado para O
+17:47:59 [S] - enviando status O
+17:47:59 [S] - recebi status O de 2
+17:48:00 [S] - enviando status O
+17:48:02 [R] - recebi requisição de 10.254.221.38
+17:48:02 [R] - não sou o líder
+17:48:05 [S] - recebi status O de 2
+17:48:07 [S] - recebi status O de 0
+17:48:08 [R] - recebi requisição de 10.254.221.38
+17:48:08 [R] - não sou o líder
+17:48:08 [S] - enviando status O
+17:48:13 [S] - recebi status O de 2
+17:48:13 [R] - recebi requisição de 10.254.221.38
+17:48:13 [R] - não sou o líder
+17:48:15 [S] - recebi status O de 0
+17:48:16 [S] - enviando status O
+17:48:17 [R] - recebi requisição de 10.254.221.38
+17:48:17 [R] - não sou o líder
+17:48:21 [S] - recebi status O de 2
+17:48:22 [R] - recebi requisição de 10.254.221.38
+17:48:22 [R] - não sou o líder
+17:48:23 [S] - recebi status O de 0
+17:48:24 [S] - enviando status O
+17:48:27 [S] - recebi status F de 0
+17:48:27 [M] - status de 0 atualizado para F
+17:48:29 [S] - recebi status O de 2
+17:48:32 [S] - enviando status O
+17:48:36 [R] - recebi requisição de 10.254.221.38
+17:48:36 [R] - sou o líder
+17:48:36 [A] - respondendo requisição de 10.254.221.38
+17:48:37 [S] - recebi status O de 2
+^Z
+</pre></div>
+</div>
+</div>
+<div class="section" id="servidor-2">
+<h2>Servidor 2<a class="headerlink" href="#servidor-2" title="Link permanente para este título">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python servidor.py 2 230.0.0.1 22000
+Servidor #2 escutando no endereço 230.0.0.1:22000
+17:47:41 [I] - enviando I
+17:47:47 [R] - recebi requisição de 10.254.221.38
+17:47:47 [R] - sou o líder
+17:47:47 [A] - respondendo requisição de 10.254.221.38
+17:47:49 [S] - enviando status O
+17:47:50 [R] - recebi requisição de 10.254.221.38
+17:47:50 [R] - sou o líder
+17:47:50 [A] - respondendo requisição de 10.254.221.38
+17:47:52 [I] - recebi I de 1
+17:47:52 [M] - status de 1 atualizado para O
+17:47:52 [S] - enviando status O
+17:47:56 [R] - recebi requisição de 10.254.221.38
+17:47:56 [R] - não sou o líder
+17:47:57 [S] - enviando status O
+17:47:59 [I] - recebi I de 0
+17:47:59 [M] - status de 0 atualizado para O
+17:47:59 [S] - enviando status O
+17:47:59 [S] - recebi status O de 1
+17:48:00 [S] - recebi status O de 1
+17:48:02 [R] - recebi requisição de 10.254.221.38
+17:48:02 [R] - não sou o líder
+17:48:05 [S] - enviando status O
+17:48:07 [S] - recebi status O de 0
+17:48:08 [R] - recebi requisição de 10.254.221.38
+17:48:08 [R] - não sou o líder
+17:48:08 [S] - recebi status O de 1
+17:48:13 [S] - enviando status O
+17:48:13 [R] - recebi requisição de 10.254.221.38
+17:48:13 [R] - não sou o líder
+17:48:15 [S] - recebi status O de 0
+17:48:16 [S] - recebi status O de 1
+17:48:17 [R] - recebi requisição de 10.254.221.38
+17:48:17 [R] - não sou o líder
+17:48:21 [S] - enviando status O
+17:48:22 [R] - recebi requisição de 10.254.221.38
+17:48:22 [R] - não sou o líder
+17:48:23 [S] - recebi status O de 0
+17:48:24 [S] - recebi status O de 1
+17:48:27 [S] - recebi status F de 0
+17:48:27 [M] - status de 0 atualizado para F
+17:48:29 [S] - enviando status O
+17:48:32 [S] - recebi status O de 1
+17:48:36 [R] - recebi requisição de 10.254.221.38
+17:48:36 [R] - não sou o líder
+17:48:37 [S] - enviando status O
+17:48:42 [R] - recebi requisição de 10.254.221.38
+17:48:42 [R] - não sou o líder
+17:48:42 [M] - status de 1 atualizado para F
+17:48:44 [R] - recebi requisição de 10.254.221.38
+17:48:44 [R] - sou o líder
+17:48:44 [A] - respondendo requisição de 10.254.221.38
+17:48:45 [S] - enviando status O
+17:48:50 [I] - recebi I de 0
+17:48:50 [M] - status de 0 atualizado para O
+17:48:50 [S] - enviando status O
+17:48:53 [S] - enviando status O
+17:48:57 [R] - recebi requisição de 10.254.221.38
+17:48:57 [R] - não sou o líder
+17:48:58 [S] - recebi status O de 0
+^C
+17:49:00 Encerrado execução
+17:49:00 [S] - enviando status F
+</pre></div>
+</div>
+</div>
+<div class="section" id="cliente">
+<h2>Cliente<a class="headerlink" href="#cliente" title="Link permanente para este título">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python cliente.py 230.0.0.1 22000
+Entre uma expressão: 4+2
+17:47:47 Enviando requisição
+17:47:47 Resposta recebida: 6.0
+Entre uma expressão: 5*7
+17:47:50 Enviando requisição
+17:47:50 Resposta recebida: 35.0
+Entre uma expressão: 2**3
+17:47:56 Enviando requisição
+17:47:56 Resposta recebida: 8.0
+Entre uma expressão: 18/3
+17:48:02 Enviando requisição
+17:48:02 Resposta recebida: 6.0
+Entre uma expressão: 8/0
+17:48:08 Enviando requisição
+17:48:08 ERRO: Não é possível realizar divisão por zero
+Entre uma expressão: ataque_hacker()
+17:48:13 Enviando requisição
+17:48:14 ERRO: Expressão contém símbolo inválido (letras)
+Entre uma expressão: 1++
+17:48:17 Enviando requisição
+17:48:17 ERRO: Expressão possui erro de sintaxe
+Entre uma expressão: 2**1024
+17:48:22 Enviando requisição
+17:48:22 ERRO: Ocorreu algum erro ao calcular a expressão
+Entre uma expressão: (2+3)*4
+17:48:36 Enviando requisição
+17:48:36 Resposta recebida: 20.0
+Entre uma expressão: 1+1
+17:48:42 Enviando requisição
+17:48:44 Timeout - não recebi resposta
+17:48:44 Enviando requisição
+17:48:44 Resposta recebida: 2.0
+Entre uma expressão: 21/3
+17:48:57 Enviando requisição
+17:48:57 Resposta recebida: 7.0
+Entre uma expressão: ^C
+Encerrando execução
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+<h3><a href="index.html">Início</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="relatorio.html">Relatório Técnico</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatorio.html#execucao">Execução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="relatorio.html#decisoes-de-projeto">Decisões de projeto</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fontes.html">Estrutura do projeto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fontes.html#id1">Fontes</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Logs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#servidor-0">Servidor 0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#servidor-1">Servidor 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#servidor-2">Servidor 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cliente">Cliente</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Gabriel de Souza Barreto, Guilherme Bastos de Oliveira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/logs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
